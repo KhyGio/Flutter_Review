@@ -7,7 +7,7 @@ void main() {
         children: [
           const SizedBox(height: 100),
           Container(color: Colors.blue, height: 400),
-          Container(
+          SizedBox(
             height: 100,
             child: Row(
               children: [
@@ -16,7 +16,7 @@ void main() {
               ],
             ),
           ),
-          Container(
+          SizedBox(
             height: 100,
             child: Row(
               children: [
