@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+
+const dice2 = 'assets/w4-s1/05.jpg';
+const dice4 = 'assets/w4-s1/06.jpg';
+
+void main() => runApp(const MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.deepPurple,
+        body: Center(child: DiceRoller()),
+      ),
+    ));
+
+class DiceRoller extends StatefulWidget {
+  const DiceRoller({super.key});
+
+  @override
+  State<DiceRoller> createState() {
+    return _DiceRollerState();
+  }
+}
+
+class _DiceRollerState extends State<DiceRoller> {
+  String activeDiceImage = dice2;
+
+  void rollDice() {
+    setState(() {
+      activeDiceImage = dice4;
+    });
+  }
+
+  @override
+  Widget build(context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset(
+          activeDiceImage,
+          width: 200,
+        ),
+        const SizedBox(height: 20),
+        TextButton(
+          onPressed: rollDice,
+          style: TextButton.styleFrom(  
+            foregroundColor: Colors.white,
+            textStyle: const TextStyle(
+              fontSize: 28,
+            ),
+          ),
+          child: const Text('Roll Dice'),
+        )
+      ],
+    );
+  }
+}
