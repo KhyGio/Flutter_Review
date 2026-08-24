@@ -8,7 +8,23 @@ class TemperatureScreen extends StatefulWidget {
 }
 
 class _TemperatureScreenState extends State<TemperatureScreen> {
- 
+
+  double? fahrenheit;
+  final _temperature = TextEditingController();
+
+  @override
+  void dispose() {
+    _temperature.dispose();
+    super.dispose();
+  }
+
+  void convert(String value) {
+    setState(() {
+      double degrees = double.tryParse(value) ?? 0;
+      fahrenheit = (degrees * 9 / 5) + 32;
+    });
+  }
+
   final BoxDecoration textDecoration = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(12),
@@ -20,45 +36,50 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
       borderRadius: BorderRadius.circular(12),
     ),
     hintText: 'Enter a temperature',
-    hintStyle: const TextStyle(color: Colors.white)
+    hintStyle: const TextStyle(color: Colors.white),
   );
-  
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(40.0),
       child: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Icon(
-            Icons.thermostat_outlined,
-            size: 120,
-            color: Colors.white,
-          ),
-          const Center(
-            child: Text(
-              "Converter",
-              style: TextStyle(color: Colors.white, fontSize: 45),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Icon(
+              Icons.thermostat_outlined,
+              size: 120,
+              color: Colors.white,
             ),
-          ),
-          const SizedBox(height: 50),
-          const Text("Temperature in Degrees:"),
-          const SizedBox(height: 10),
-          TextField(
-            decoration: inputDecoration,
-            style: const TextStyle(color: Colors.white)
-          ),
-          const SizedBox(height: 30),
-          const Text("Temperature in Fahrenheit:"),
-          const SizedBox(height: 10),
-          Container(
+            const Center(
+              child: Text(
+                "Converter",
+                style: TextStyle(color: Colors.white, fontSize: 45),
+              ),
+            ),
+            const SizedBox(height: 50),
+            const Text("Temperature in Degrees:"),
+            const SizedBox(height: 10),
+            TextField(
+              decoration: inputDecoration,
+              style: const TextStyle(color: Colors.white),
+              keyboardType: TextInputType.number,
+              controller: _temperature,
+              onChanged: convert,
+            ),
+            const SizedBox(height: 30),
+            const Text("Temperature in Fahrenheit:"),
+            const SizedBox(height: 10),
+            Container(
               padding: const EdgeInsets.all(10),
               decoration: textDecoration,
-              child: Text("TODO !!"))
-        ],
-      )),
+              child: Text(fahrenheit?.toString() ?? 'Enter Temperature'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
