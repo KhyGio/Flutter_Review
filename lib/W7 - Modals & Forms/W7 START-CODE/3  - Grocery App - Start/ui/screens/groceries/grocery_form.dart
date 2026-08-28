@@ -13,7 +13,8 @@
 // -	Add item button
 
 import 'package:flutter/material.dart';
-import 'package:mobile_app/W7%20-%20Modals%20&%20Forms/W7%20START-CODE/3%20%20-%20Grocery%20App%20-%20Start/models/grocery.dart';
+
+import '../../../models/grocery.dart';
 
 class GroceryForm extends StatefulWidget {
   const GroceryForm({super.key, required this.onAddItem});
@@ -27,6 +28,7 @@ class GroceryForm extends StatefulWidget {
 class _GroceryFormState extends State<GroceryForm> {
   final _name = TextEditingController();
   final _quantity = TextEditingController();
+  bool isNext = false;
 
   @override
   void dispose() {
@@ -35,33 +37,54 @@ class _GroceryFormState extends State<GroceryForm> {
     super.dispose();
   }
 
-  void getItems() {
+  void onAddPressed() {
+    final String name;
+    int quantity = 1;
+    name = _name.text;
+    quantity = int.parse(_quantity.text);
+
+    final groceryItem = GroceryItem(
+      id: DateTime.now().toString(),
+      name: name,
+      quantity: quantity,
+      category: GroceryCategory.fruit,
+    );
+
+    widget.onAddItem(groceryItem);
+  }
+
+  void nextPressed() {
     setState(() {
-      final String name;
-      int quantity = 1;
-      name = _name.text;
-      quantity = int.parse(_quantity.text);
-
-      final groceryItem = GroceryItem(
-        id: DateTime.now().toString(),
-        name: name,
-        quantity: quantity,
-        category: GroceryCategory.fruit,
-      );
-
-      widget.onAddItem(groceryItem);
+      isNext = !isNext;
     });
   }
 
   void reset() {
-    _name.clear();
-    _quantity.clear();
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return isNext ? Padding(
+      padding: EdgeInsets.all(8),
+      child: Column(
+        children: [
+          TextField(
+            controller: _quantity,
+            keyboardType: TextInputType.number,
+            maxLength: 50,
+            decoration: InputDecoration(
+              label: Text('Quantity'),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 10),
+          ElevatedButton(onPressed: onAddPressed, child: Text('Add Item')),
+          SizedBox(height: 10),
+          ElevatedButton(onPressed: reset, child: Text('Reset')),
+        ],
+      ),
+    ) : Padding(
       padding: EdgeInsets.all(8),
       child: Column(
         children: [
@@ -74,21 +97,12 @@ class _GroceryFormState extends State<GroceryForm> {
             ),
           ),
           SizedBox(height: 10),
-          TextField(
-            controller: _quantity,
-            keyboardType: TextInputType.number,
-            maxLength: 50,
-            decoration: InputDecoration(
-              label: Text('Quantity'),
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(onPressed: getItems, child: Text('Add Item')),
+          ElevatedButton(onPressed: nextPressed, child: Text('Next')),
           SizedBox(height: 10),
           ElevatedButton(onPressed: reset, child: Text('Reset')),
         ],
       ),
     );
+
   }
 }
